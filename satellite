@@ -144,6 +144,8 @@ def do_configure(param):
     if enablerepos:
       print('com.oracle.linux.satellite.enablerepos=%s' % enablerepos, file=f)
     f.close()
+    run_cmd(['systemctl', 'unmask', 'bootstrap-wrapper.service'])
+    run_cmp(['systemctl', 'enable', 'bootstrap-wrapper.service'])
     return json.dumps(param)
 
 
