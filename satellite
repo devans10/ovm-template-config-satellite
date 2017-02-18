@@ -60,7 +60,7 @@ def do_enumerate(target):
                   {'key': 'com.oracle.linux.satellite.force',
                    'description': 'Force registration',
                    'hidden': True},
-                  {'key': 'com.oracle.linux.satellite.add-domain',
+                  {'key': 'com.oracle.linux.satellite.add_domain',
                    'description': 'Automatically add the clients domain to Satellite',
                    'hidden': True},
                   {'key': 'com.oracle.linux.satellite.release',
@@ -71,7 +71,7 @@ def do_enumerate(target):
                    'hidden': True},
                   {'key': 'com.oracle.linux.satellite.rex',
                    'description': 'Install Satellite SSH key for remote execution'},
-                  {'key': 'com.oracle.linux.satellite.rex-user',
+                  {'key': 'com.oracle.linux.satellite.rex_user',
                    'description': 'Local user used by Satellite remote execution feature',},
                   {'key': 'com.oracle.linux.satellite.enablerepos',
                    'description': 'Repositories to be enabled via subscription-manager - comma separated',
@@ -95,11 +95,11 @@ def do_configure(param):
     args = param.get('com.oracle.linux.satellite.args', '').strip()
     update = param.get('com.oracle.linux.satellite.update', '').strip()
     force = param.get('com.oracle.linux.satellite.force', '').strip()
-    add-domain = param.get('com.oracle.linux.satellite.add-domain', '')strip()
+    add-domain = param.get('com.oracle.linux.satellite.add_domain', '')strip()
     release = param.get('com.oracle.linux.satellite.release', '').strip()
     unmanaged = param.get('com.oracle.linux.satellite.unmanaged', '').strip()
     rex = param.get('com.oracle.linux.satellite.rex', '').strip()
-    rex-user = param.get('com.oracle.linux.satellite.rex-user', '').strip()
+    rex-user = param.get('com.oracle.linux.satellite.rex_user', '').strip()
     enablerepos = param.get('com.oracle.linux.satellite.enablerepos', '').strip()
 
     f = open('/root/bootstrap.properties', 'w')
@@ -132,7 +132,7 @@ def do_configure(param):
     if force:
       print('com.oracle.linux.satellite.force=%s' % force, file=f)
     if add-domain:
-      print('com.oracle.linux.satellite.add-domain=%s' % add-domain, file=f)
+      print('com.oracle.linux.satellite.add_domain=%s' % add-domain, file=f)
     if release:
       print('com.oracle.linux.satellite.release=%s' % release, file=f)
     if unmanaged:
@@ -140,7 +140,7 @@ def do_configure(param):
     if rex:
       print('com.oracle.linux.satellite.rex=%s' % rex, file=f)
     if rex-user:
-      print('com.oracle.linux.satellite.rex-user=%s' % rex-user, file=f)
+      print('com.oracle.linux.satellite.rex_user=%s' % rex-user, file=f)
     if enablerepos:
       print('com.oracle.linux.satellite.enablerepos=%s' % enablerepos, file=f)
     f.close()
