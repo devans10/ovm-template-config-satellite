@@ -18,7 +18,7 @@ dist: clean
 
 install:
 	install -D satellite $(DESTDIR)/etc/template.d/scripts/satellite
-  install -D bootstrap_wrapper.sh $(DESTDIR)/root/bootsrtap_wrapper.sh
+        install -D bootstrap_wrapper.sh $(DESTDIR)/usr/local/sbin/bootsrtap_wrapper.sh
 rpm: dist
 	rpmbuild -ta $(PACKAGE)-$(VERSION).tar.gz
 
