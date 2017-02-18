@@ -1,0 +1,163 @@
+#!/usr/bin/env python
+
+### BEGIN PLUGIN INFO
+# name: satellite
+# configure: 80
+# cleanup: 20
+# description: Script to bootstrap server to RedHat Satellite.
+### END PLUGIN INFO
+
+try:
+    import json
+except ImportError:
+    import simplejson as json
+from __future__ import print_function
+from templateconfig.cli import main
+from templateconfig.common import run_cmd
+
+
+def do_enumerate(target):
+    param = []
+    if target == 'configure':
+        param += [{'key': 'com.oracle.linux.satellite.server',
+                   'descritpion': 'RedHat Satellite server fqdn. e.g. satellite.expample.com.',
+                   'required': True},
+                  {'key': 'com.oracle.linux.satellite.login',
+                   'description': 'RedHat Satellite API login',
+                   'required': True},
+                  {'key': 'com.oracle.linux.satellite.password',
+                   'description': 'com.oracle.linux.satellite.password',
+                   'password': True,
+                   'required': True},
+                  {'key': 'com.oracle.linux.satellite.activationkey',
+                   'description': 'RedHat Satellite Activation Key.',
+                   'required': True},
+                  {'key': 'com.oracle.linux.satellite.skippuppet',
+                   'description': 'Do not install Puppet',
+                   'hidden': True},
+                  {'key': 'com.oracle.linux.satellite.skipforeman',
+                   'description': 'Do not create a Foreman host',
+                   'hidden': True},
+                  {'key': 'com.oracle.linux.satellite.group',
+                   'description': 'Title of Hostgroup in Satellite that the host is to be associated with',
+                   'required': True},
+                  {'key': 'com.oracle.linux.satellite.location',
+                   'description': 'Title of the location in Satellite that the host is to be associated with',
+                   'required': True},
+                  {'key': 'com.oracle.linux.satellite.operatingsystem',
+                   'description': 'Title of the Operating System in Satellite that the host is to be associated with'}
+                  {'key': 'com.oracle.linux.satellite.partitiontable',
+                   'description': 'Name of the Partition Table in Foreman tha the host is to be associated with',
+                   'hidden': True},
+                  {'key': 'com.oracle.linux.satellite.organization',
+                   'description': 'Name of the Organization in Satellite that the host is to be associated with'},
+                  {'key': 'com.oracle.linux.satellite.args',
+                   'description': 'Which additional arguments shall be passed to subscription-manager',
+                   'hidden': True},
+                  {'key': 'com.oracle.linux.satellite.update',
+                   'description': 'Fully Updates the system',
+                   'hidden': True},
+                  {'key': 'com.oracle.linux.satellite.force',
+                   'description': 'Force registration',
+                   'hidden': True},
+                  {'key': 'com.oracle.linux.satellite.add-domain',
+                   'description': 'Automatically add the clients domain to Satellite',
+                   'hidden': True},
+                  {'key': 'com.oracle.linux.satellite.release',
+                   'description': 'Specify release version',
+                   'hidden': True},
+                  {'key': 'com.oracle.linux.satellite.unmanaged',
+                   'description': 'Add the server as unmanaged',
+                   'hidden': True},
+                  {'key': 'com.oracle.linux.satellite.rex',
+                   'description': 'Install Satellite SSH key for remote execution'},
+                  {'key': 'com.oracle.linux.satellite.rex-user',
+                   'description': 'Local user used by Satellite remote execution feature',},
+                  {'key': 'com.oracle.linux.satellite.enablerepos',
+                   'description': 'Repositories to be enabled via subscription-manager - comma separated',
+                   'hidden': True}]
+    return json.dumps(param)
+
+
+def do_configure(param):
+    param = json.loads(param)
+    server = param.get('com.oracle.linux.satellite.server', '').strip()
+    login = param.get('com.oracle.linux.satellite.login', '').strip()
+    password = param.get('com.oracle.linux.satellite.password', '').strip()
+    activationkey = param.get('com.oracle.linux.satellite.activationkey', '').strip()
+    skippuppet = param.get('com.oracle.linux.satellite.skippuppet', '').strip()
+    skipforeman = param.get('com.oracle.linux.satellite.skipforeman', '').strip()
+    group = param.get('com.oracle.linux.satellite.group', '').strip()
+    location = param.get('com.oracle.linux.satellite.location', '').strip()
+    operatingsystem = param.get('com.oracle.linux.satellite.operatingsystem', '').strip()
+    partitiontable = param.get('com.oracle.linux.satellite.partitiontable', '').strip()
+    organization = param.get('com.oracle.linux.satellite.organization', '').strip()
+    args = param.get('com.oracle.linux.satellite.args', '').strip()
+    update = param.get('com.oracle.linux.satellite.update', '').strip()
+    force = param.get('com.oracle.linux.satellite.force', '').strip()
+    add-domain = param.get('com.oracle.linux.satellite.add-domain', '')strip()
+    release = param.get('com.oracle.linux.satellite.release', '').strip()
+    unmanaged = param.get('com.oracle.linux.satellite.unmanaged', '').strip()
+    rex = param.get('com.oracle.linux.satellite.rex', '').strip()
+    rex-user = param.get('com.oracle.linux.satellite.rex-user', '').strip()
+    enablerepos = param.get('com.oracle.linux.satellite.enablerepos', '').strip()
+
+    f = open('/root/bootstrap.properties', 'w')
+    if server:
+      print('com.oracle.linux.satellite.server=%s' % server, file=f)
+    if login:
+      print('com.oracle.linux.satellite.login=%s' % login, file=f)
+    if password:
+      print('com.oracle.linux.satellite.password=%s' % password, file=f)
+    if activationkey:
+      print('com.oracle.linux.satellite.activationkey=%s' % activationkey, file=f)
+    if skippuppet:
+      print('com.oracle.linux.satellite.skippuppet=%s' % skippuppet, file=f)
+    if skipforeman:
+      print('com.oracle.linux.satellite.skipforeman=%s' % skipforeman, file=f)
+    if group:
+      print('com.oracle.linux.satellite.group=%s' % group, file=f)
+    if location:
+      print('com.oracle.linux.satellite.location=%s' % location, file=f)
+    if operatingsystem:
+      print('com.oracle.linux.satellite.operatingsystem=%s' % operatingsystem, file=f)
+    if organization:
+      print('com.oracle.linux.satellite.organization=%s' % organization, file=f)
+    if partitiontable:
+      print('com.oracle.linux.satellite.partitiontable=%s' % partitiontable, file=f)
+    if args:
+      print('com.oracle.linux.satellite.args=%s' % args, file=f)
+    if update:
+      print('com.oracle.linux.satellite.update=%s' % update, file=f)
+    if force:
+      print('com.oracle.linux.satellite.force=%s' % force, file=f)
+    if add-domain:
+      print('com.oracle.linux.satellite.add-domain=%s' % add-domain, file=f)
+    if release:
+      print('com.oracle.linux.satellite.release=%s' % release, file=f)
+    if unmanaged:
+      print('com.oracle.linux.satellite.unmanaged=%s' % unmanaged, file=f)
+    if rex:
+      print('com.oracle.linux.satellite.rex=%s' % rex, file=f)
+    if rex-user:
+      print('com.oracle.linux.satellite.rex-user=%s' % rex-user, file=f)
+    if enablerepos:
+      print('com.oracle.linux.satellite.enablerepos=%s' % enablerepos, file=f)
+    f.close()
+    return json.dumps(param)
+
+
+def do_unconfigure(param):
+    param = json.loads(param)
+    run_cmd(['subscription-manager', 'unregister'])
+    return json.dumps(param)
+
+
+def do_cleanup(param):
+    param = json.loads(param)
+    run_cmd(['rm', '-rf', '/var/lib/puppet/ssl'])
+    return json.dumps(param)
+
+
+if __name__ == '__main__':
+    main(do_enumerate, {'configure': do_configure, 'cleanup': do_cleanup})
