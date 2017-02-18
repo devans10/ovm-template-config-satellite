@@ -1,0 +1,11 @@
+[Unit]
+Description=Script to bootstrap server to RedHat Satellite
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/sbin/bootstrap_wrappper.sh
+TimeoutStartSec=0
+
+[Install]
+WantedBy=default.target
