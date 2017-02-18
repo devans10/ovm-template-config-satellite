@@ -13,89 +13,90 @@ then
   done < "$file"
 
   cmd="/root/bootstrap.py"
-  if [ -v ${com_oracle_linux_satellite_server} ]; then
+  if [ ! -z "${com_oracle_linux_satellite_server}" ]; then
     cmd="${cmd} -s ${com_oracle_linux_satellite_server}"
   fi
-  if [ -v ${com_oracle_linux_satellite_login} ]; then
-    cmd="${cmd} -l ${com_oracle_linux_satellite}"
+  if [ ! -z "${com_oracle_linux_satellite_login}" ]; then
+    cmd="${cmd} -l ${com_oracle_linux_satellite_login}"
   fi
-  if [ -v ${com_oracle_linux_satellite_password} ]; then
+  if [ ! -z "${com_oracle_linux_satellite_password}" ]; then
     cmd="${cmd} -p ${com_oracle_linux_satellite_password}"
   fi
-  if [ -v ${com_oracle_linux_satellite_activationkey} ]; then
+  if [ ! -z "${com_oracle_linux_satellite_activationkey}" ]; then
     cmd="${cmd} -a ${com_oracle_linux_satellite_activationkey}"
   fi
-  if [ -v ${com_oracle_linux_satellite_skippuppet} ]; then
-    if [ ${com_oracle_linux_satellite_skippuppet} == "True" ]; then
+  if [ ! -z "${com_oracle_linux_satellite_skippuppet}" ]; then
+    if [ "${com_oracle_linux_satellite_skippuppet}" = "True" ]; then
       cmd="${cmd} -P"
     fi
   fi
-  if [ -v ${com_oracle_linux_satellite_skipforeman} ]; then
-    if [ ${com_oracle_linux_satellite_skipforeman} == "True" ]; then
+  if [ ! -z "${com_oracle_linux_satellite_skipforeman}" ]; then
+    if [ "${com_oracle_linux_satellite_skipforeman}" = "True" ]; then
       cmd="${cmd} --skip-foreman"
     fi
   fi
-  if [ -v ${com_oracle_linux_satellite_group} ]; then
+  if [ ! -z "${com_oracle_linux_satellite_group}" ]; then
     cmd="${cmd} -g ${com_oracle_linux_satellite_group}"
   fi
-  if [ -v ${com_oracle_linux_satellite_location} ]; then
+  if [ ! -z "${com_oracle_linux_satellite_location}" ]; then
     cmd="${cmd} -L ${com_oracle_linux_satellite_location}"
   fi
-  if [ -v ${com_oracle_linux_satellite_operatingsystem} ]; then
+  if [ ! -z "${com_oracle_linux_satellite_operatingsystem}" ]; then
     cmd="${cmd} -O ${com_oracle_linux_satellite_operatingsystem}"
   fi
-  if [ -v ${com_oracle_linux_satellite_partitiontable} ]; then
+  if [ ! -z "${com_oracle_linux_satellite_partitiontable}" ]; then
     cmd="${cmd} --partitiontable=${com_oracle_linux_satellite_partitiontable}"
   fi
-  if [ -v ${com_oracle_linux_satellite_organization} ]; then
+  if [ ! -z "${com_oracle_linux_satellite_organization}" ]; then
     cmd="${cmd} -o ${com_oracle_linux_satellite_organization}"
   fi
-  if [ -v ${com_oracle_linux_satellite_args} ]; then
+  if [ ! -z "${com_oracle_linux_satellite_args}" ]; then
     cmd="${cmd} -S ${com_oracle_linux_satellite_args}"
   fi
-  if [ -v ${com_oracle_linux_satellite_update} ]; then
-    if [ ${com_oracle_linux_satellite_update} == "True" ]; then
+  if [ ! -z "${com_oracle_linux_satellite_update}" ]; then
+    if [ "${com_oracle_linux_satellite_update}" = "True" ]; then
       cmd="${cmd} -u"
     fi
   fi
-  if [ -v ${com_oracle_linux_satellite_force} ]; then
-    if [ ${com_oracle_linux_satellite_force} == "True" ]; then
+  if [ ! -z "${com_oracle_linux_satellite_force}" ]; then
+    if [ "${com_oracle_linux_satellite_force}" = "True" ]; then
       cmd="${cmd} -f"
     fi
   fi
-  if [ -v ${com_oracle_linux_satellite_add_domain} ]; then
-    if [ ${com_oracle_linux_satellite_add_domain} == "True" ]; then
+  if [ ! -z "${com_oracle_linux_satellite_add_domain}" ]; then
+    if [ "${com_oracle_linux_satellite_add_domain}" = "True" ]; then
       cmd="${cmd} --add-domain"
     fi
   fi
-  if [ -v ${com_oracle_linux_satellite_release} ]; then
+  if [ ! -z "${com_oracle_linux_satellite_release}" ]; then
     cmd="${cmd} -r ${com_oracle_linux_satellite_release}"
   fi
-  if [ -v ${com_oracle_linux_satellite_unmanaged} ]; then
-    if [ ${com_oracle_linux_satellite_unmanaged} == "True" ]; then
+  if [ ! -z "${com_oracle_linux_satellite_unmanaged}" ]; then
+    if [ "${com_oracle_linux_satellite_unmanaged}" = "True" ]; then
       cmd="${cmd} --unmanaged"
     fi
   fi
-  if [ -v ${com_oracle_linux_satellite_rex} ]; then
-    if [ ${com_oracle_linux_satellite_rex} == "True" ]; then
+  if [ ! -z "${com_oracle_linux_satellite_rex}" ]; then
+    if [ "${com_oracle_linux_satellite_rex}" = "True" ]; then
       cmd="${cmd} --rex"
     fi
   fi
-  if [ -v ${com_oracle_linux_satellite_rex_user} ]; then
+  if [ ! -z "${com_oracle_linux_satellite_rex_user}" ]; then
     cmd="${cmd} --rex-user=${com_oracle_linux_satellite_rex_user}"
   fi
-  if [ -v ${com_oracle_linux_satellite_enablerepos} ]; then
+  if [ ! -z "${com_oracle_linux_satellite_enablerepos}" ]; then
     cmd="${cmd} --enablerepos=${com_oracle_linux_satellite_enablerepos}"
   fi
 
-  $(cmd)
+  eval $cmd
   ret_code=$?
-  if [ $ret_code == 0 ]; the
+  if [ $ret_code == 0 ]; then
+    echo "Success!"
     /bin/rm -f $file
     /bin/systemctl disable bootstrap-wrapper.service
     /bin/systemctl mask bootstrap-wrapper.service
   fi
 
 else
-  exit(0)
+  exit 0
 fi
