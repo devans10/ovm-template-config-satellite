@@ -24,17 +24,18 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 if [ $1 = 1 ]; then
-    /usr/sbin/ovm-chkconfig --add example
+    /usr/sbin/ovm-chkconfig --add satellite
 fi
 
 %preun
 if [ $1 = 0 ]; then
-    /usr/sbin/ovm-chkconfig --del example
+    /usr/sbin/ovm-chkconfig --del satellite
 fi
 
 %files
 %defattr(-,root,root, -)
 %{_sysconfdir}/template.d/scripts/satellite
-%attr(700,root,root) /root/bootstrap_wrapper.sh
+%attr(700,root,root) %{_prefix}/local/sbin/bootstrap_wrapper.sh
+%attr(700,root,root) %{_prefix}/lib/systemd/system/bootstrap-wrapper.service
 
 %changelog
