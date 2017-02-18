@@ -7,11 +7,11 @@
 # description: Script to bootstrap server to RedHat Satellite.
 ### END PLUGIN INFO
 
+from __future__ import print_function
 try:
     import json
 except ImportError:
     import simplejson as json
-from __future__ import print_function
 from templateconfig.cli import main
 from templateconfig.common import run_cmd
 
@@ -20,61 +20,63 @@ def do_enumerate(target):
     param = []
     if target == 'configure':
         param += [{'key': 'com.oracle.linux.satellite.server',
-                   'descritpion': 'RedHat Satellite server fqdn. e.g. satellite.expample.com.',
+                   'description': 'RedHat Satellite server fqdn. e.g. satellite.expample.com: ',
                    'required': True},
                   {'key': 'com.oracle.linux.satellite.login',
-                   'description': 'RedHat Satellite API login',
+                   'description': 'RedHat Satellite API login: ',
                    'required': True},
                   {'key': 'com.oracle.linux.satellite.password',
-                   'description': 'com.oracle.linux.satellite.password',
+                   'description': 'RedHat Satellite API password: ',
                    'password': True,
                    'required': True},
                   {'key': 'com.oracle.linux.satellite.activationkey',
-                   'description': 'RedHat Satellite Activation Key.',
+                   'description': 'RedHat Satellite Activation Key: ',
                    'required': True},
                   {'key': 'com.oracle.linux.satellite.skippuppet',
-                   'description': 'Do not install Puppet',
+                   'description': 'Do not install Puppet: True or False: ',
                    'hidden': True},
                   {'key': 'com.oracle.linux.satellite.skipforeman',
-                   'description': 'Do not create a Foreman host',
+                   'description': 'Do not create a Foreman host: True or False',
                    'hidden': True},
                   {'key': 'com.oracle.linux.satellite.group',
-                   'description': 'Title of Hostgroup in Satellite that the host is to be associated with',
+                   'description': 'Hostgroup in Satellite that the host is to be associated with: ',
                    'required': True},
                   {'key': 'com.oracle.linux.satellite.location',
-                   'description': 'Title of the location in Satellite that the host is to be associated with',
+                   'description': 'Location of the Host: use "" if necessary: ',
                    'required': True},
-                  {'key': 'com.oracle.linux.satellite.operatingsystem',
-                   'description': 'Title of the Operating System in Satellite that the host is to be associated with'}
-                  {'key': 'com.oracle.linux.satellite.partitiontable',
-                   'description': 'Name of the Partition Table in Foreman tha the host is to be associated with',
-                   'hidden': True},
                   {'key': 'com.oracle.linux.satellite.organization',
-                   'description': 'Name of the Organization in Satellite that the host is to be associated with'},
+                   'description': 'Organization in Satellite: use "" if necessary: '},
+                  {'key': 'com.oracle.linux.satellite.operatingsystem',
+                   'description': 'Operating System in Satellite: use "" if necessary: '},
+                  {'key': 'com.oracle.linux.satellite.partitiontable',
+                   'description': 'Partition Table in Satellite: ',
+                   'hidden': True},
                   {'key': 'com.oracle.linux.satellite.args',
-                   'description': 'Which additional arguments shall be passed to subscription-manager',
+                   'description': 'Which additional arguments shall be passed to subscription-manager: comma separated: ',
                    'hidden': True},
                   {'key': 'com.oracle.linux.satellite.update',
-                   'description': 'Fully Updates the system',
+                   'description': 'Fully Updates the system: True or False: ',
                    'hidden': True},
                   {'key': 'com.oracle.linux.satellite.force',
-                   'description': 'Force registration',
+                   'description': 'Force registration: True or False: ',
                    'hidden': True},
                   {'key': 'com.oracle.linux.satellite.add_domain',
-                   'description': 'Automatically add the clients domain to Satellite',
+                   'description': 'Automatically add the clients domain to Satellite: True or False: ',
                    'hidden': True},
                   {'key': 'com.oracle.linux.satellite.release',
-                   'description': 'Specify release version',
+                   'description': 'Specify release version: ',
                    'hidden': True},
                   {'key': 'com.oracle.linux.satellite.unmanaged',
-                   'description': 'Add the server as unmanaged',
+                   'description': 'Add the server as unmanaged: True or False: ',
                    'hidden': True},
                   {'key': 'com.oracle.linux.satellite.rex',
-                   'description': 'Install Satellite SSH key for remote execution'},
+                   'description': 'Install Satellite SSH key for remote execution: True or False: ',
+                   'hidden': True},
                   {'key': 'com.oracle.linux.satellite.rex_user',
-                   'description': 'Local user used by Satellite remote execution feature',},
+                   'description': 'Local user used by Satellite remote execution feature: ',
+                   'hidden': True},
                   {'key': 'com.oracle.linux.satellite.enablerepos',
-                   'description': 'Repositories to be enabled via subscription-manager - comma separated',
+                   'description': 'Repositories to be enabled via subscription-manager - comma separated: ',
                    'hidden': True}]
     return json.dumps(param)
 
@@ -95,11 +97,11 @@ def do_configure(param):
     args = param.get('com.oracle.linux.satellite.args', '').strip()
     update = param.get('com.oracle.linux.satellite.update', '').strip()
     force = param.get('com.oracle.linux.satellite.force', '').strip()
-    add-domain = param.get('com.oracle.linux.satellite.add_domain', '')strip()
+    add_domain = param.get('com.oracle.linux.satellite.add_domain', '').strip()
     release = param.get('com.oracle.linux.satellite.release', '').strip()
     unmanaged = param.get('com.oracle.linux.satellite.unmanaged', '').strip()
     rex = param.get('com.oracle.linux.satellite.rex', '').strip()
-    rex-user = param.get('com.oracle.linux.satellite.rex_user', '').strip()
+    rex_user = param.get('com.oracle.linux.satellite.rex_user', '').strip()
     enablerepos = param.get('com.oracle.linux.satellite.enablerepos', '').strip()
 
     f = open('/root/bootstrap.properties', 'w')
@@ -131,16 +133,16 @@ def do_configure(param):
       print('com.oracle.linux.satellite.update=%s' % update, file=f)
     if force:
       print('com.oracle.linux.satellite.force=%s' % force, file=f)
-    if add-domain:
-      print('com.oracle.linux.satellite.add_domain=%s' % add-domain, file=f)
+    if add_domain:
+      print('com.oracle.linux.satellite.add_domain=%s' % add_domain, file=f)
     if release:
       print('com.oracle.linux.satellite.release=%s' % release, file=f)
     if unmanaged:
       print('com.oracle.linux.satellite.unmanaged=%s' % unmanaged, file=f)
     if rex:
       print('com.oracle.linux.satellite.rex=%s' % rex, file=f)
-    if rex-user:
-      print('com.oracle.linux.satellite.rex_user=%s' % rex-user, file=f)
+    if rex_user:
+      print('com.oracle.linux.satellite.rex_user=%s' % rex_user, file=f)
     if enablerepos:
       print('com.oracle.linux.satellite.enablerepos=%s' % enablerepos, file=f)
     f.close()
