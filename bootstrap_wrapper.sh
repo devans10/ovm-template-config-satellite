@@ -91,7 +91,9 @@ then
   $(cmd)
   ret_code=$?
   if [ $ret_code == 0 ]; the
-    rm -f $file
+    /bin/rm -f $file
+    /bin/systemctl disable bootstrap-wrapper.service
+    /bin/systemctl mask bootstrap-wrapper.service
   fi
 
 else
