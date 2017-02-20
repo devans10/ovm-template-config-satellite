@@ -45,9 +45,11 @@ def do_enumerate(target):
                    'description': 'Location of the Host: use "" if necessary: ',
                    'required': True},
                   {'key': 'com.oracle.linux.satellite.organization',
-                   'description': 'Organization in Satellite: use "" if necessary: '},
+                   'description': 'Organization in Satellite: use "" if necessary: ',
+                   'required': True},
                   {'key': 'com.oracle.linux.satellite.operatingsystem',
-                   'description': 'Operating System in Satellite: use "" if necessary: '},
+                   'description': 'Operating System in Satellite: use "" if necessary: ',
+                   'required': True},
                   {'key': 'com.oracle.linux.satellite.partitiontable',
                    'description': 'Partition Table in Satellite: ',
                    'hidden': True},
@@ -59,7 +61,7 @@ def do_enumerate(target):
                    'hidden': True},
                   {'key': 'com.oracle.linux.satellite.force',
                    'description': 'Force registration: True or False: ',
-                   'hidden': True},
+                   'required': True},
                   {'key': 'com.oracle.linux.satellite.add_domain',
                    'description': 'Automatically add the clients domain to Satellite: True or False: ',
                    'hidden': True},
@@ -147,7 +149,7 @@ def do_configure(param):
       print('com.oracle.linux.satellite.enablerepos=%s' % enablerepos, file=f)
     f.close()
     run_cmd(['systemctl', 'unmask', 'bootstrap-wrapper.service'])
-    run_cmp(['systemctl', 'enable', 'bootstrap-wrapper.service'])
+    run_cmd(['systemctl', 'enable', 'bootstrap-wrapper.service'])
     return json.dumps(param)
 
 
