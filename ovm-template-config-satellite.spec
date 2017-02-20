@@ -1,5 +1,5 @@
 Name: ovm-template-config-satellite
-Version: 0.1
+Version: 0.2
 Release: 1%{?dist}
 Summary: Oracle VM template configuration script for bootstrapping server to RedHat Satellite.
 Group: Applications/System
@@ -36,6 +36,6 @@ fi
 %defattr(-,root,root, -)
 %{_sysconfdir}/template.d/scripts/satellite
 %attr(700,root,root) %{_prefix}/local/sbin/bootstrap_wrapper.sh
-%attr(700,root,root) %{_prefix}/lib/systemd/system/bootstrap-wrapper.service
+%attr(644,root,root) %{_prefix}/lib/systemd/system/bootstrap-wrapper.service
 
 %changelog
