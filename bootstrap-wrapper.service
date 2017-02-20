@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/sbin/bootstrap_wrappper.sh
+ExecStart=/usr/local/sbin/bootstrap_wrapper.sh
 TimeoutStartSec=0
 
 [Install]
