@@ -2,7 +2,7 @@
 
 ### BEGIN PLUGIN INFO
 # name: satellite
-# configure: 80
+# configure: 91
 # cleanup: 20
 # description: Script to bootstrap server to RedHat Satellite.
 ### END PLUGIN INFO
