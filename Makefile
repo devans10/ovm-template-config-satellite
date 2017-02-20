@@ -1,6 +1,6 @@
 DESTDIR=
 PACKAGE=ovm-template-config-satellite
-VERSION=0.1
+VERSION=0.2
 
 help:
         @echo 'Commonly used make targets:'
